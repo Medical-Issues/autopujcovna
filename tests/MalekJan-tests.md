@@ -183,7 +183,7 @@
 **Vstup:** Rezervace `r1` s vehicleId `v1`
 **Akce:** `selectReservationDetailData(state, 'r1')`
 **Očekávaný výstup:**
-```javascript
+```php
 {
   reservation: {...},
   vehicle: {...},

@@ -113,7 +113,7 @@
 ### TC-S1: Inicializace stavu aplikace
 **Vstup:** Volání `getState()` na začátku
 **Očekávaný výstup:**
-```javascript
+```php
 {
   vehicles: { byId: {}, allIds: [], loading: false, error: null },
   reservations: { byId: {}, allIds: [], loading: false, error: null },
