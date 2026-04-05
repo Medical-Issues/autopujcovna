@@ -43,7 +43,7 @@ export function renderReservationsView(state, selectors) {
     );
     
     const reservationList = el('div', { className: 'space-y-3' },
-        list(filteredReservations, (reservation) => renderReservationRow(reservation), () =>
+        list(filteredReservations, (reservation) => renderReservationRow(reservation, state), () =>
             el('div', { className: 'text-center py-12 bg-white rounded-lg border border-gray-200' },
                 el('p', { className: 'text-gray-500' }, 'Žádné rezervace neodpovídají filtrům')
             )
@@ -53,36 +53,37 @@ export function renderReservationsView(state, selectors) {
     return el('div', { className: 'space-y-6' }, header, filtersEl, reservationList);
 }
 
-function renderReservationRow(reservation) {
+function renderReservationRow(reservation, state) {
     const startDate = new Date(reservation.startDate).toLocaleDateString('cs-CZ');
     const endDate = new Date(reservation.endDate).toLocaleDateString('cs-CZ');
     
     const statusActions = [];
-    const userRole = 'admin';
+    const userRole = state.auth.user?.role || 'guest';
+    const isAuthenticated = state.auth.isAuthenticated;
     
     if (reservation.status === 'NEW') {
         statusActions.push(button('Potvrdit', (e) => {
             e.stopPropagation();
             handlers.onConfirmReservation(reservation.id, userRole);
-        }, { variant: 'success', size: 'sm' }));
+        }, { variant: 'success', size: 'sm', disabled: !isAuthenticated }));
         statusActions.push(button('Zrušit', (e) => {
             e.stopPropagation();
             handlers.onCancelReservation(reservation.id, userRole, 'Zrušeno operátorem');
-        }, { variant: 'danger', size: 'sm' }));
+        }, { variant: 'danger', size: 'sm', disabled: !isAuthenticated }));
     }
     
     if (reservation.status === 'CONFIRMED') {
         statusActions.push(button('Vydat vozidlo', (e) => {
             e.stopPropagation();
             handlers.onActivateReservation(reservation.id, userRole);
-        }, { variant: 'primary', size: 'sm' }));
+        }, { variant: 'primary', size: 'sm', disabled: !isAuthenticated }));
     }
     
     if (reservation.status === 'ACTIVE') {
         statusActions.push(button('Přijmout vozidlo', (e) => {
             e.stopPropagation();
             handlers.onOpenModal('complete-reservation', { reservationId: reservation.id });
-        }, { variant: 'success', size: 'sm' }));
+        }, { variant: 'success', size: 'sm', disabled: !isAuthenticated }));
     }
     
     return el('div', {
@@ -135,7 +136,8 @@ export function renderReservationDetailView(state, selectors) {
     }
     
     const { reservation, vehicle, canCancel, canActivate, canComplete } = data;
-    const userRole = 'admin';
+    const userRole = state.auth.user?.role || 'guest';
+    const isAuthenticated = state.auth.isAuthenticated;
     
     const startDate = new Date(reservation.startDate).toLocaleDateString('cs-CZ');
     const endDate = new Date(reservation.endDate).toLocaleDateString('cs-CZ');
@@ -152,13 +154,13 @@ export function renderReservationDetailView(state, selectors) {
             statusBadge(reservation.status)
         ),
         el('div', { className: 'flex gap-2' },
-            canActivate && button('Vydat vozidlo', () => {
+            canActivate && isAuthenticated && button('Vydat vozidlo', () => {
                 handlers.onActivateReservation(reservation.id, userRole);
             }, { variant: 'primary', icon: icon('key', 18) }),
-            canComplete && button('Přijmout vozidlo', () => {
+            canComplete && isAuthenticated && button('Přijmout vozidlo', () => {
                 handlers.onOpenModal('complete-reservation', { reservationId: reservation.id });
             }, { variant: 'success', icon: icon('check', 18) }),
-            canCancel && button('Zrušit rezervaci', () => {
+            canCancel && isAuthenticated && button('Zrušit rezervaci', () => {
                 if (confirm('Opravdu chcete zrušit tuto rezervaci?')) {
                     handlers.onCancelReservation(reservation.id, userRole, 'Zrušeno uživatelem');
                 }

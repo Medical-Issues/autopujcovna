@@ -15,7 +15,7 @@ interface Action {
 ```
 
 **Příklad:**
-```php
+```
 {
   type: 'CREATE_VEHICLE',
   payload: {

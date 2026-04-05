@@ -12,7 +12,6 @@
  */
 export function el(tag, attrs = {}, ...children) {
     const element = document.createElement(tag);
-    
     // Nastavení atributů
     Object.entries(attrs).forEach(([key, value]) => {
         if (key === 'className') {
@@ -31,6 +30,8 @@ export function el(tag, attrs = {}, ...children) {
         } else if (key === 'html') {
             // WARNING: Použití innerHTML je rizikové, používejte pouze pro trusted content
             element.innerHTML = value;
+        } else if (key === 'disabled') {
+            element.disabled = !!value;
         } else {
             element.setAttribute(key, value);
         }
@@ -195,11 +196,16 @@ export function button(text, onClick, options = {}) {
     const variantClass = variants[options.variant || 'primary'];
     const sizeClass = sizes[options.size || 'md'];
     
-    return el('button', {
+    const attrs = {
         className: `${baseClass} ${variantClass} ${sizeClass} ${options.className || ''}`,
-        onClick: onClick,
-        disabled: options.disabled
-    }, options.icon || null, text);
+        onClick: onClick
+    };
+    
+    if (options.disabled) {
+        attrs.disabled = true;
+    }
+    
+    return el('button', attrs, options.icon || null, text);
 }
 
 /**

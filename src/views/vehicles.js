@@ -17,7 +17,8 @@ export function renderVehiclesView(state, selectors) {
         ),
         button('Přidat vozidlo', () => handlers.onOpenModal('create-vehicle'), {
             variant: 'primary',
-            icon: icon('plus', 18)
+            icon: icon('plus', 18),
+            disabled: !state.auth.isAuthenticated
         })
     );
     
@@ -41,7 +42,7 @@ export function renderVehiclesView(state, selectors) {
     );
     
     const vehicleList = el('div', { className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4' },
-        list(filteredVehicles, (vehicle) => renderVehicleCard(vehicle), () =>
+        list(filteredVehicles, (vehicle) => renderVehicleCard(vehicle, state), () =>
             el('div', { className: 'col-span-full text-center py-12' },
                 el('p', { className: 'text-gray-500' }, 'Žádná vozidla neodpovídají filtrům')
             )
@@ -51,7 +52,7 @@ export function renderVehiclesView(state, selectors) {
     return el('div', { className: 'space-y-6' }, header, filtersEl, vehicleList);
 }
 
-function renderVehicleCard(vehicle) {
+function renderVehicleCard(vehicle, state) {
     const canReserve = vehicle.status === 'AVAILABLE';
     
     return el('div', {
@@ -194,21 +195,21 @@ function renderStatusActions(vehicle, state) {
     if (vehicle.status === 'DRAFT') {
         actions.push(button('Aktivovat (Dostupné)', () => {
             handlers.onUpdateVehicleStatus(vehicle.id, 'AVAILABLE', userRole);
-        }, { variant: 'success', className: 'w-full' }));
+        }, { variant: 'success', className: 'w-full', disabled: !state.auth.isAuthenticated }));
     }
     
     // AVAILABLE → MAINTENANCE
     if (vehicle.status === 'AVAILABLE') {
         actions.push(button('Odeslat do servisu', () => {
             handlers.onUpdateVehicleStatus(vehicle.id, 'MAINTENANCE', userRole);
-        }, { variant: 'secondary', className: 'w-full', icon: icon('tool', 16) }));
+        }, { variant: 'secondary', className: 'w-full', icon: icon('tool', 16), disabled: !state.auth.isAuthenticated }));
     }
     
     // MAINTENANCE → AVAILABLE
     if (vehicle.status === 'MAINTENANCE') {
         actions.push(button('Servis dokončen', () => {
             handlers.onUpdateVehicleStatus(vehicle.id, 'AVAILABLE', userRole);
-        }, { variant: 'success', className: 'w-full' }));
+        }, { variant: 'success', className: 'w-full', disabled: !state.auth.isAuthenticated }));
     }
     
     // AVAILABLE → DECOMMISSIONED
@@ -217,7 +218,7 @@ function renderStatusActions(vehicle, state) {
             if (confirm('Opravdu chcete vyřadit toto vozidlo?')) {
                 handlers.onUpdateVehicleStatus(vehicle.id, 'DECOMMISSIONED', userRole);
             }
-        }, { variant: 'danger', className: 'w-full' }));
+        }, { variant: 'danger', className: 'w-full', disabled: !state.auth.isAuthenticated }));
     }
     
     if (actions.length === 0) {
