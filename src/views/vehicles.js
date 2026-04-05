@@ -42,7 +42,7 @@ export function renderVehiclesView(state, selectors) {
     );
     
     const vehicleList = el('div', { className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4' },
-        list(filteredVehicles, (vehicle) => renderVehicleCard(vehicle, state), () =>
+        list(filteredVehicles, (vehicle) => renderVehicleCard(vehicle), () =>
             el('div', { className: 'col-span-full text-center py-12' },
                 el('p', { className: 'text-gray-500' }, 'Žádná vozidla neodpovídají filtrům')
             )
@@ -52,7 +52,7 @@ export function renderVehiclesView(state, selectors) {
     return el('div', { className: 'space-y-6' }, header, filtersEl, vehicleList);
 }
 
-function renderVehicleCard(vehicle, state) {
+function renderVehicleCard(vehicle) {
     const canReserve = vehicle.status === 'AVAILABLE';
     
     return el('div', {
