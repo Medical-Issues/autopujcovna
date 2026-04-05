@@ -1,70 +1,40 @@
-/**
- * Selektory (IR05) - Výběr dat ze stavu
- * Odpovědnost: Málek Jan
- * Zajišťuje: filtrování kolekcí, odvozené hodnoty (isAvailable, canReserve, totalPrice),
- *            pojmenování významových stavů aplikace, přípravu dat pro konkrétní pohled
- */
-
 import { VehicleStatus } from '../entities/Vehicle.js';
 import { ReservationStatus } from '../entities/Reservation.js';
 
-/**
- * Získání všech vozidel jako pole
- */
 export function selectAllVehicles(state) {
     return state.vehicles.allIds.map(id => state.vehicles.byId[id]);
 }
 
-/**
- * Získání všech rezervací jako pole
- */
 export function selectAllReservations(state) {
     return state.reservations.allIds.map(id => state.reservations.byId[id]);
 }
 
-/**
- * Získání konkrétního vozidla podle ID
- */
 export function selectVehicleById(state, vehicleId) {
     return state.vehicles.byId[vehicleId] || null;
 }
 
-/**
- * Získání konkrétní rezervace podle ID
- */
 export function selectReservationById(state, reservationId) {
     return state.reservations.byId[reservationId] || null;
 }
 
-/**
- * Odvozená hodnota: Je vozidlo dostupné?
- */
 export function selectIsVehicleAvailable(state, vehicleId) {
     const vehicle = selectVehicleById(state, vehicleId);
     return vehicle?.status === VehicleStatus.AVAILABLE;
 }
 
-/**
- * Odvozená hodnota: Lze vytvořit rezervaci na vozidlo?
- */
 export function selectCanCreateReservation(state, vehicleId) {
     const vehicle = selectVehicleById(state, vehicleId);
     return vehicle?.status === VehicleStatus.AVAILABLE;
 }
 
-/**
- * Filtrovaná vozidla podle UI filtrů
- */
 export function selectFilteredVehicles(state) {
     const { status, search } = state.ui.filters.vehicles;
     let vehicles = selectAllVehicles(state);
-    
-    // Filtrování podle statusu
+
     if (status && status !== 'all') {
         vehicles = vehicles.filter(v => v.status === status);
     }
-    
-    // Filtrování podle vyhledávání
+
     if (search) {
         const searchLower = search.toLowerCase();
         vehicles = vehicles.filter(v => 
@@ -78,19 +48,14 @@ export function selectFilteredVehicles(state) {
     return vehicles;
 }
 
-/**
- * Filtrované rezervace podle UI filtrů
- */
 export function selectFilteredReservations(state) {
     const { status, search } = state.ui.filters.reservations;
     let reservations = selectAllReservations(state);
-    
-    // Filtrování podle statusu
+
     if (status && status !== 'all') {
         reservations = reservations.filter(r => r.status === status);
     }
-    
-    // Filtrování podle vyhledávání
+
     if (search) {
         const searchLower = search.toLowerCase();
         reservations = reservations.filter(r => 
@@ -103,9 +68,6 @@ export function selectFilteredReservations(state) {
     return reservations;
 }
 
-/**
- * Odvozená hodnota: Počet vozidel podle statusu
- */
 export function selectVehicleCounts(state) {
     const vehicles = selectAllVehicles(state);
     return {
@@ -118,9 +80,6 @@ export function selectVehicleCounts(state) {
     };
 }
 
-/**
- * Odvozená hodnota: Počet rezervací podle statusu
- */
 export function selectReservationCounts(state) {
     const reservations = selectAllReservations(state);
     return {
@@ -133,9 +92,6 @@ export function selectReservationCounts(state) {
     };
 }
 
-/**
- * Odvozená hodnota: Celkový výnos z rezervací
- */
 export function selectTotalRevenue(state) {
     const reservations = selectAllReservations(state);
     return reservations
@@ -143,10 +99,7 @@ export function selectTotalRevenue(state) {
         .reduce((sum, r) => sum + (r.totalPrice || 0), 0);
 }
 
-/**
- * Odvozená hodnota: Aktivní rezervace pro zákazníka
- * Invariant: Zákazník může mít maximálně jednu ACTIVE rezervaci
- */
+
 export function selectActiveReservationForCustomer(state, customerId) {
     const reservations = selectAllReservations(state);
     return reservations.find(r => 
@@ -154,9 +107,6 @@ export function selectActiveReservationForCustomer(state, customerId) {
     ) || null;
 }
 
-/**
- * Odvozená hodnota: Rezervace v kolizi s daným termínem
- */
 export function selectConflictingReservations(state, vehicleId, startDate, endDate, excludeId = null) {
     const reservations = selectAllReservations(state);
     const start = new Date(startDate);
@@ -175,9 +125,6 @@ export function selectConflictingReservations(state, vehicleId, startDate, endDa
     });
 }
 
-/**
- * Příprava dat pro detail vozidla
- */
 export function selectVehicleDetailData(state, vehicleId) {
     const vehicle = selectVehicleById(state, vehicleId);
     if (!vehicle) return null;
@@ -218,9 +165,6 @@ export function selectReservationDetailData(state, reservationId) {
     };
 }
 
-/**
- * Významové stavy aplikace pro přehled
- */
 export function selectAppStateSummary(state) {
     const vehicleCounts = selectVehicleCounts(state);
     const reservationCounts = selectReservationCounts(state);
@@ -237,16 +181,10 @@ export function selectAppStateSummary(state) {
     };
 }
 
-/**
- * Získání notifikací
- */
 export function selectNotifications(state) {
     return state.ui.notifications;
 }
 
-/**
- * Získání aktuálního modálu
- */
 export function selectCurrentModal(state) {
     return state.ui.modal;
 }

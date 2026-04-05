@@ -1,14 +1,5 @@
-/**
- * Asynchronní operace a side-effects (IR03)
- * Odpovědnost: Veselský Jan
- * Zajišťuje: komunikaci s Mock API, práci s časem, zpracování SUCCESS/REJECTED/ERROR,
- *            přechody do loading a error stavů
- */
-
-// Simulace síťové latence
 const NETWORK_DELAY = 300;
 
-// In-memory úložiště pro mock data
 let mockDatabase = {
     vehicles: [
         {
@@ -240,7 +231,7 @@ function handleAuthRequest(method, action, data) {
         if (!user) {
             throw new Error('Neplatné přihlašovací údaje');
         }
-        
+
         // Simulace JWT tokenu
         const token = btoa(JSON.stringify({
             userId: user.id,
@@ -263,9 +254,6 @@ function handleAuthRequest(method, action, data) {
     throw new Error('Neplatný auth požadavek');
 }
 
-/**
- * Reset mock databáze na výchozí stav
- */
 export function resetMockDatabase() {
     mockDatabase = {
         vehicles: [...mockDatabase.vehicles],
@@ -274,9 +262,6 @@ export function resetMockDatabase() {
     };
 }
 
-/**
- * Získání aktuálního stavu mock databáze (pro testování)
- */
 export function getMockDatabase() {
     return { ...mockDatabase };
 }

@@ -3,7 +3,7 @@
  * Odpovědnost: Málek Jan
  * Zajišťuje: převod view-state na UI strukturu, podmíněné zobrazení částí UI,
  *            sestavení DOM stromu
- * 
+ *
  * Pomocné funkce pro vytváření DOM elementů bez frameworku
  */
 
@@ -33,7 +33,7 @@ export function el(tag, attrs = {}, ...children) {
             element.setAttribute(key, value);
         }
     });
-    
+
     // Přidání dětí
     children.forEach(child => {
         if (child == null) return;
@@ -47,7 +47,7 @@ export function el(tag, attrs = {}, ...children) {
             });
         }
     });
-    
+
     return element;
 }
 
@@ -82,7 +82,7 @@ export function icon(name, size = 20) {
     svg.setAttribute('fill', 'none');
     svg.setAttribute('stroke', 'currentColor');
     svg.setAttribute('stroke-width', '2');
-    
+
     const paths = {
         car: [['path', {d: "M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"}], ['circle', {cx: "7", cy: "17", r: "2"}], ['circle', {cx: "17", cy: "17", r: "2"}]],
         calendar: [['rect', {x: "3", y: "4", width: "18", height: "18", rx: "2", ry: "2"}], ['line', {x1: "16", y1: "2", x2: "16", y2: "6"}], ['line', {x1: "8", y1: "2", x2: "8", y2: "6"}], ['line', {x1: "3", y1: "10", x2: "21", y2: "10"}]],
@@ -111,36 +111,31 @@ export function icon(name, size = 20) {
         dashboard: [['rect', {x: "3", y: "3", width: "7", height: "7"}], ['rect', {x: "14", y: "3", width: "7", height: "7"}], ['rect', {x: "14", y: "14", width: "7", height: "7"}], ['rect', {x: "3", y: "14", width: "7", height: "7"}]],
         list: [['line', {x1: "8", y1: "6", x2: "21", y2: "6"}], ['line', {x1: "8", y1: "12", x2: "21", y2: "12"}], ['line', {x1: "8", y1: "18", x2: "21", y2: "18"}], ['line', {x1: "3", y1: "6", x2: "3.01", y2: "6"}], ['line', {x1: "3", y1: "12", x2: "3.01", y2: "12"}], ['line', {x1: "3", y1: "18", x2: "3.01", y2: "18"}]]
     };
-    
+
     const iconPaths = paths[name] || paths.info;
     iconPaths.forEach(([tag, attrs]) => {
         const el = document.createElementNS(svgNS, tag);
         Object.entries(attrs).forEach(([key, val]) => el.setAttribute(key, val));
         svg.appendChild(el);
     });
-    
+
     return svg;
 }
 
-/**
- * Status badge
- */
 export function statusBadge(status, options = {}) {
     const statusColors = {
-        // Vehicle statuses
         'DRAFT': 'bg-gray-100 text-gray-800',
         'AVAILABLE': 'bg-green-100 text-green-800',
         'RENTED': 'bg-blue-100 text-blue-800',
         'MAINTENANCE': 'bg-yellow-100 text-yellow-800',
         'DECOMMISSIONED': 'bg-red-100 text-red-800',
-        // Reservation statuses
         'NEW': 'bg-gray-100 text-gray-800',
         'CONFIRMED': 'bg-purple-100 text-purple-800',
         'ACTIVE': 'bg-blue-100 text-blue-800',
         'COMPLETED': 'bg-green-100 text-green-800',
         'CANCELED': 'bg-red-100 text-red-800'
     };
-    
+
     const statusLabels = {
         'DRAFT': 'Koncept',
         'AVAILABLE': 'Dostupné',
@@ -153,15 +148,12 @@ export function statusBadge(status, options = {}) {
         'COMPLETED': 'Dokončená',
         'CANCELED': 'Zrušená'
     };
-    
+
     return el('span', {
         className: `px-2 py-1 rounded-full text-xs font-medium ${statusColors[status] || 'bg-gray-100 text-gray-800'} ${options.className || ''}`
     }, statusLabels[status] || status);
 }
 
-/**
- * Tlačítko
- */
 export function button(text, onClick, options = {}) {
     const variants = {
         primary: 'bg-blue-600 text-white hover:bg-blue-700',
@@ -170,26 +162,26 @@ export function button(text, onClick, options = {}) {
         success: 'bg-green-600 text-white hover:bg-green-700',
         ghost: 'text-gray-600 hover:bg-gray-100'
     };
-    
+
     const sizes = {
         sm: 'px-3 py-1.5 text-sm',
         md: 'px-4 py-2',
         lg: 'px-6 py-3 text-lg'
     };
-    
+
     const baseClass = 'rounded-lg font-medium transition-colors inline-flex items-center gap-2';
     const variantClass = variants[options.variant || 'primary'];
     const sizeClass = sizes[options.size || 'md'];
-    
+
     const attrs = {
         className: `${baseClass} ${variantClass} ${sizeClass} ${options.className || ''}`,
         onClick: onClick
     };
-    
+
     if (options.disabled) {
         attrs.disabled = true;
     }
-    
+
     return el('button', attrs, options.icon || null, text);
 }
 
@@ -198,13 +190,13 @@ export function button(text, onClick, options = {}) {
  */
 export function input(label, value, onChange, options = {}) {
     const wrapper = el('div', { className: 'space-y-1' });
-    
+
     if (label) {
         wrapper.appendChild(el('label', {
             className: 'block text-sm font-medium text-gray-700'
         }, label));
     }
-    
+
     const inputEl = el('input', {
         type: options.type || 'text',
         value: value || '',
@@ -216,7 +208,7 @@ export function input(label, value, onChange, options = {}) {
         step: options.step
     });
     inputEl.addEventListener('input', (e) => onChange && onChange(e.target.value));
-    
+
     wrapper.appendChild(inputEl);
     return wrapper;
 }
