@@ -111,7 +111,7 @@ export async function mockApiCall(method, endpoint, data = null) {
         throw new Error('Síťová chyba - zkuste to znovu');
     }
     
-    const url = endpoint.replace(/^\
+    const url = endpoint.replace(/^\//, '');
     const parts = url.split('/');
     const resource = parts[0];
     const id = parts[1];
