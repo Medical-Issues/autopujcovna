@@ -174,7 +174,7 @@ function renderCompleteReservationModal(state, data) {
         className: 'space-y-4',
         onSubmit: (e) => {
             e.preventDefault();
-            handlers.onCompleteReservation(reservationId, 'admin', formData.finalMileage).then(result => {
+            handlers.onCompleteReservation(reservationId, formData.finalMileage).then(result => {
                 if (result.success) {
                     handlers.onCloseModal();
                 }

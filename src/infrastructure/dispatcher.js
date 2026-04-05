@@ -209,6 +209,24 @@ registerAction('CREATE_RESERVATION', async (payload, getState) => {
         return { success: false, error: 'Vozidlo nenalezeno' };
     }
     
+    // Invariant: Zákazník může mít max jednu ACTIVE rezervaci
+    const existingReservations = Object.values(state.reservations.byId);
+    const customerActiveReservations = existingReservations.filter(
+        r => r.customerEmail === reservationData.customerEmail && 
+             r.status === ReservationStatus.ACTIVE
+    );
+    
+    if (customerActiveReservations.length > 0) {
+        mutate({ 
+            type: 'ADD_NOTIFICATION', 
+            payload: { type: 'error', message: 'Zákazník již má aktivní rezervaci - nelze vytvořit další' }
+        });
+        return {
+            success: false,
+            error: 'Zákazník již má aktivní rezervaci - nelze vytvořit další'
+        };
+    }
+    
     const vehicle = Vehicle.fromJSON(vehicleData);
     const availabilityCheck = vehicle.canCreateReservation();
     
