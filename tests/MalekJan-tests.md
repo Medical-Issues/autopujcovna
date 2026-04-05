@@ -309,11 +309,11 @@
 
 ## Shrnutí pokrytí
 
-| Kategorie | Počet testů | Pokrytí |
-|-----------|-------------|---------|
-| Reservation FSM | 15 | Všechny stavy, přechody, invarianty |
-| IR05 Selectors | 9 | Filtrování, výběr, odvozené hodnoty |
-| IR06 Views | 8 | DOM komponenty, renderování |
-| IR07 Handlers | 5 | Mapování UI → akce |
-| IR08 Auth | 4 | Login, logout, role, token |
-| **CELKEM** | **41** | **Kompletní pokrytí odpovědností** |
+| Kategorie       | Počet testů | Pokrytí                             |
+|-----------------|-------------|-------------------------------------|
+| Reservation FSM | 15          | Všechny stavy, přechody, invarianty |
+| IR05 Selectors  | 9           | Filtrování, výběr, odvozené hodnoty |
+| IR06 Views      | 8           | DOM komponenty, renderování         |
+| IR07 Handlers   | 5           | Mapování UI → akce                  |
+| IR08 Auth       | 4           | Login, logout, role, token          |
+| **CELKEM**      | **41**      | **Kompletní pokrytí odpovědností**  |

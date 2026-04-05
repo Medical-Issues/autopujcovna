@@ -260,11 +260,11 @@
 
 ## Shrnutí pokrytí
 
-| Kategorie | Počet testů | Pokrytí |
-|-----------|-------------|---------|
-| Vehicle FSM | 15 | Všechny stavy, přechody, invarianty |
-| IR01 State | 6 | Inicializace, mutace, subscribery |
-| IR02 Dispatcher | 5 | Registrace, dispatch, chyby |
-| IR03 Async | 4 | API volání, loading, error stavy |
-| IR04 Router | 5 | URL parsing, navigace, synchronizace |
-| **CELKEM** | **35** | **Kompletní pokrytí odpovědností** |
+| Kategorie       | Počet testů | Pokrytí                              |
+|-----------------|-------------|--------------------------------------|
+| Vehicle FSM     | 15          | Všechny stavy, přechody, invarianty  |
+| IR01 State      | 6           | Inicializace, mutace, subscribery    |
+| IR02 Dispatcher | 5           | Registrace, dispatch, chyby          |
+| IR03 Async      | 4           | API volání, loading, error stavy     |
+| IR04 Router     | 5           | URL parsing, navigace, synchronizace |
+| **CELKEM**      | **35**      | **Kompletní pokrytí odpovědností**   |
