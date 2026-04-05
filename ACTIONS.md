@@ -9,8 +9,8 @@ Každá akce v systému má následující strukturu:
 
 ```typescript
 interface Action {
-  type: string;        // Unikátní identifikátor akce
-  payload?: any;       // Data předávaná akci (volitelné)
+  type: string;        
+  payload?: any;       
 }
 ```
 
@@ -64,17 +64,17 @@ interface Action {
 ### 2.3 Implementace
 
 ```javascript
-// src/infrastructure/dispatcher.js
 
-// Registry handlerů
+
+
 const actionHandlers = new Map();
 
-// Registrace handleru
+
 export function registerAction(type, handler) {
   actionHandlers.set(type, handler);
 }
 
-// Centrální dispatch
+
 export async function dispatch(action) {
   if (!action || !action.type) {
     return { success: false, error: 'Invalid action' };
@@ -119,8 +119,8 @@ const result = await dispatch({
   }
 });
 
-// Úspěch: {success: true, data: {id: 'v1', status: 'MAINTENANCE', ...}}
-// Neúspěch: {success: false, error: 'Nepovolený přechod: ...'}
+
+
 ```
 
 ### 3.2 Reservation akce (IR02 - Málek Jan)
@@ -136,7 +136,7 @@ const result = await dispatch({
 
 **Příklad volání s kaskádovými změnami:**
 ```javascript
-// ACTIVATE_RESERVATION automaticky mění i stav vozidla
+
 const result = await dispatch({
   type: 'ACTIVATE_RESERVATION',
   payload: {
@@ -145,10 +145,10 @@ const result = await dispatch({
   }
 });
 
-// Výsledek:
-// - Rezervace: CONFIRMED → ACTIVE
-// - Vozidlo: AVAILABLE → RENTED
-// - Notifikace: "Vozidlo bylo vydáno klientovi"
+
+
+
+
 ```
 
 ### 3.3 UI akce (IR02 - oba)
@@ -211,7 +211,7 @@ Mutace jsou jediný způsob, jak měnit stav aplikace. Volají se z dispatcheru.
 ### 4.2 Implementace mutace
 
 ```javascript
-// src/infrastructure/state.js
+
 
 export function mutate(mutation) {
   const oldState = getState();
@@ -234,10 +234,10 @@ export function mutate(mutation) {
       }
       break;
       
-    // ... další mutace
+    
   }
   
-  // Notifikace subscriberů o změně
+  
   notifySubscribers(oldState, getState(), mutation);
   return true;
 }
@@ -283,23 +283,23 @@ UI ──> dispatch(CREATE_VEHICLE) ──> handler
 ### 5.2 Příklad implementace
 
 ```javascript
-// src/infrastructure/dispatcher.js
+
 
 registerAction('FETCH_VEHICLES', async (payload, getState) => {
-  // 1. Nastavit loading
+  
   mutate({ type: 'SET_VEHICLES_LOADING', payload: true });
   
   try {
-    // 2. Async volání API (IR03)
+    
     const vehicles = await mockApiCall('GET', '/vehicles');
     
-    // 3. Úspěch - uložit data
+    
     mutate({ type: 'SET_VEHICLES', payload: vehicles });
     mutate({ type: 'SET_VEHICLES_LOADING', payload: false });
     
     return { success: true, data: vehicles };
   } catch (error) {
-    // 4. Chyba - uložit error
+    
     mutate({ type: 'SET_VEHICLES_ERROR', payload: error.message });
     mutate({ type: 'SET_VEHICLES_LOADING', payload: false });
     
@@ -324,7 +324,7 @@ registerAction('FETCH_VEHICLES', async (payload, getState) => {
 ### 6.2 Synchronizace stavu → URL
 
 ```javascript
-// src/infrastructure/router.js
+
 
 export function updateUrlFromState(state) {
   const { currentView, selectedVehicleId, selectedReservationId } = state.ui;
@@ -357,23 +357,23 @@ registerAction('UPDATE_VEHICLE_STATUS', async (payload, getState) => {
   const state = getState();
   const vehicleData = state.vehicles.byId[vehicleId];
   
-  // 1. Kontrola existence
+  
   if (!vehicleData) {
     return { success: false, error: 'Vozidlo nenalezeno' };
   }
   
-  // 2. Business validace (FSM)
+  
   const vehicle = Vehicle.fromJSON(vehicleData);
   const result = vehicle.updateStatus(newStatus, userRole);
   
   if (!result.success) {
-    // Notifikace o chybě
+    
     mutate({ type: 'ADD_NOTIFICATION', payload: { type: 'error', message: result.error }});
     return result;
   }
   
-  // 3. API volání a aktualizace stavu
-  // ...
+  
+  
 });
 ```
 

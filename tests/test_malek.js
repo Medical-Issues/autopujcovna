@@ -1,9 +1,3 @@
-/**
- * Testy pro MalekJan - Reservation FSM, Selectors, Views, Handlers, Auth
- * Spustit: node tests/test_malek.js (v Node) nebo import do konzole
- */
-
-// Test runner
 function describe(name, fn) {
     console.log(`\n📦 ${name}`);
     fn();
@@ -54,7 +48,7 @@ function expect(actual) {
     };
 }
 
-// Mock data
+
 const mockReservation = {
     id: 'r1',
     vehicleId: 'v1',
@@ -72,7 +66,7 @@ const mockUser = {
     name: 'Admin'
 };
 
-// ==================== TESTY Reservation FSM ====================
+
 
 describe('Reservation FSM: Stavy a přechody', () => {
     
@@ -108,7 +102,7 @@ describe('Reservation FSM: Stavy a přechody', () => {
         expect(validTransitions['COMPLETED']).toHaveLength(0);
     });
 
-    // Invarianty
+    
     it('Zákazník může mít max 1 ACTIVE rezervaci', () => {
         const reservations = [
             { customerEmail: 'jan@seznam.cz', status: 'ACTIVE' },
@@ -124,18 +118,18 @@ describe('Reservation FSM: Stavy a přechody', () => {
     });
 
     it('Validace rezervačních dat funguje', () => {
-        // Použití mockReservation
+        
         expect(mockReservation.customerEmail).toBe('jan@seznam.cz');
         expect(mockReservation.status).toBe('NEW');
         
-        // Kontrola validního rozsahu dat
+        
         const start = new Date(mockReservation.startDate);
         const end = new Date(mockReservation.endDate);
         expect(end > start).toBeTruthy();
     });
 });
 
-// ==================== TESTY IR05: Selectors ====================
+
 
 describe('IR05: Selectors', () => {
     
@@ -193,12 +187,12 @@ describe('IR05: Selectors', () => {
     });
 });
 
-// ==================== TESTY IR06: Views ====================
+
 
 describe('IR06: Views (DOM komponenty)', () => {
     
     it('button() vytváří tlačítko s textem', () => {
-        // Simulace
+        
         const btn = { tag: 'button', text: 'Klikni', className: 'bg-blue-600' };
         expect(btn.text).toBe('Klikni');
         expect(btn.tag).toBe('button');
@@ -235,7 +229,7 @@ describe('IR06: Views (DOM komponenty)', () => {
     });
 });
 
-// ==================== TESTY IR07: Handlers ====================
+
 
 describe('IR07: Handlers (UI → Akce)', () => {
     
@@ -263,7 +257,7 @@ describe('IR07: Handlers (UI → Akce)', () => {
         const data = { vehicleId: 'v1', startDate: '', endDate: '2024-01-20' };
         const isValid = data.vehicleId && data.startDate && data.endDate;
         
-        expect(isValid).toBeFalsy(); // startDate je prázdný
+        expect(isValid).toBeFalsy(); 
     });
 
     it('Handler pro aktualizaci stavu vozidla', () => {
@@ -283,7 +277,7 @@ describe('IR07: Handlers (UI → Akce)', () => {
     });
 });
 
-// ==================== TESTY IR08: Auth ====================
+
 
 describe('IR08: Authentication & Authorization', () => {
     
@@ -335,7 +329,7 @@ describe('IR08: Authentication & Authorization', () => {
     });
 
     it('Admin má plná práva v systému', () => {
-        // Použití mockUser
+        
         expect(mockUser.role).toBe('admin');
         expect(mockUser.email).toBe('admin@autopujcovna.cz');
         
@@ -344,7 +338,7 @@ describe('IR08: Authentication & Authorization', () => {
     });
 });
 
-// ==================== VÝSLEDEK ====================
+
 
 console.log('\n' + '='.repeat(50));
 console.log('TESTY MALEK DOKONČENY');

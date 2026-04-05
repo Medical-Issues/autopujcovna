@@ -1,18 +1,5 @@
-/**
- * Renderovací logika (IR06) - View composition
- * Odpovědnost: Málek Jan
- * Zajišťuje: převod view-state na UI strukturu, podmíněné zobrazení částí UI,
- *            sestavení DOM stromu
- *
- * Pomocné funkce pro vytváření DOM elementů bez frameworku
- */
-
-/**
- * Vytvoření DOM elementu s atributy a dětmi
- */
 export function el(tag, attrs = {}, ...children) {
     const element = document.createElement(tag);
-    // Nastavení atributů
     Object.entries(attrs).forEach(([key, value]) => {
         if (key === 'className') {
             element.className = value;
@@ -34,7 +21,6 @@ export function el(tag, attrs = {}, ...children) {
         }
     });
 
-    // Přidání dětí
     children.forEach(child => {
         if (child == null) return;
         if (typeof child === 'string' || typeof child === 'number') {
@@ -51,18 +37,12 @@ export function el(tag, attrs = {}, ...children) {
     return element;
 }
 
-/**
- * Vyprázdnění elementu
- */
 export function clear(element) {
     while (element.firstChild) {
         element.removeChild(element.firstChild);
     }
 }
 
-/**
- * Seznam s mapováním
- */
 export function list(items, renderFn, emptyRenderer = () => el('p', { text: 'Žádné položky' })) {
     if (!items || items.length === 0) {
         return emptyRenderer();
@@ -70,9 +50,6 @@ export function list(items, renderFn, emptyRenderer = () => el('p', { text: 'Ž�
     return items.map(renderFn);
 }
 
-/**
- * Ikona (SVG)
- */
 export function icon(name, size = 20) {
     const svgNS = "http://www.w3.org/2000/svg";
     const svg = document.createElementNS(svgNS, 'svg');
@@ -185,9 +162,6 @@ export function button(text, onClick, options = {}) {
     return el('button', attrs, options.icon || null, text);
 }
 
-/**
- * Input field
- */
 export function input(label, value, onChange, options = {}) {
     const wrapper = el('div', { className: 'space-y-1' });
 
@@ -213,9 +187,6 @@ export function input(label, value, onChange, options = {}) {
     return wrapper;
 }
 
-/**
- * Select field
- */
 export function select(label, value, options, onChange, config = {}) {
     const wrapper = el('div', { className: 'space-y-1' });
     

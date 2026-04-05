@@ -1,13 +1,6 @@
-/**
- * Layout komponenty - navigace, notifikace, header
- */
-
 import { el, icon, button, statusBadge } from './components.js';
 import * as handlers from '../infrastructure/handlers.js';
 
-/**
- * Hlavní navigační menu
- */
 export function renderNavigation(state) {
     const { currentView } = state.ui;
     const { isAuthenticated, user } = state.auth;
@@ -20,13 +13,11 @@ export function renderNavigation(state) {
     return el('nav', { className: 'bg-white border-b border-gray-200 mb-6' },
         el('div', { className: 'max-w-6xl mx-auto px-4' },
             el('div', { className: 'flex items-center justify-between h-16' },
-                // Logo a brand
                 el('div', { className: 'flex items-center gap-2' },
                     icon('car', 28),
                     el('span', { className: 'text-xl font-bold text-gray-900' }, 'AutoPůjčovna')
                 ),
                 
-                // Navigace
                 el('div', { className: 'flex items-center gap-1' },
                     navItems.map(item => el('button', {
                         className: `flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
@@ -38,7 +29,7 @@ export function renderNavigation(state) {
                     }, icon(item.icon, 18), item.label))
                 ),
                 
-                // Uživatel
+                
                 isAuthenticated 
                     ? el('div', { className: 'flex items-center gap-3' },
                         el('div', { className: 'flex items-center gap-2' },
@@ -61,11 +52,8 @@ export function renderNavigation(state) {
     );
 }
 
-/**
- * Notifikace
- */
 export function renderNotifications(state) {
-    const notifications = state.ui.notifications.slice(-5); // Posledních 5
+    const notifications = state.ui.notifications.slice(-5); 
     
     if (notifications.length === 0) return null;
     
@@ -98,9 +86,6 @@ export function renderNotifications(state) {
     );
 }
 
-/**
- * Loading spinner
- */
 export function renderLoading() {
     return el('div', { className: 'flex items-center justify-center py-12' },
         el('div', { 
@@ -109,9 +94,6 @@ export function renderLoading() {
     );
 }
 
-/**
- * Error message
- */
 export function renderError(message, onRetry) {
     return el('div', { className: 'text-center py-12' },
         icon('warning', 48),
@@ -123,9 +105,6 @@ export function renderError(message, onRetry) {
     );
 }
 
-/**
- * Footer
- */
 export function renderFooter() {
     return el('footer', { className: 'mt-12 py-6 border-t border-gray-200 text-center' },
         el('p', { className: 'text-sm text-gray-500' },
@@ -137,9 +116,6 @@ export function renderFooter() {
     );
 }
 
-/**
- * Dashboard summary widget
- */
 export function renderDashboardSummary(state, selectors) {
     const summary = selectors.selectAppStateSummary(state);
     

@@ -120,7 +120,7 @@ export function selectConflictingReservations(state, vehicleId, startDate, endDa
         const rStart = new Date(r.startDate);
         const rEnd = new Date(r.endDate);
         
-        // Kolize: start < rEnd && end > rStart
+        
         return start < rEnd && end > rStart;
     });
 }
@@ -128,25 +128,22 @@ export function selectConflictingReservations(state, vehicleId, startDate, endDa
 export function selectVehicleDetailData(state, vehicleId) {
     const vehicle = selectVehicleById(state, vehicleId);
     if (!vehicle) return null;
-    
-    const reservations = selectAllReservations(state).filter(r => 
+
+    const reservations = selectAllReservations(state).filter(r =>
         r.vehicleId === vehicleId && r.status !== ReservationStatus.CANCELED
     );
-    
+
     return {
         vehicle,
         reservations,
         isAvailable: vehicle.status === VehicleStatus.AVAILABLE,
-        canEdit: true, // Lze rozšířit o kontrolu práv
-        canDelete: vehicle.status !== VehicleStatus.RENTED && 
+        canEdit: true, 
+        canDelete: vehicle.status !== VehicleStatus.RENTED &&
                    vehicle.status !== VehicleStatus.DECOMMISSIONED,
         canCreateReservation: vehicle.status === VehicleStatus.AVAILABLE
     };
 }
 
-/**
- * Příprava dat pro detail rezervace
- */
 export function selectReservationDetailData(state, reservationId) {
     const reservation = selectReservationById(state, reservationId);
     if (!reservation) return null;

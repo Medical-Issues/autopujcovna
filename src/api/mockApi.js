@@ -104,23 +104,14 @@ let mockDatabase = {
     ]
 };
 
-/**
- * Simulace asynchronního API volání
- * @param {string} method - HTTP metoda
- * @param {string} endpoint - API endpoint
- * @param {object} data - Data pro POST/PUT
- * @returns {Promise} - Vrací data nebo chybu
- */
 export async function mockApiCall(method, endpoint, data = null) {
-    // Simulace síťové latence
     await new Promise(resolve => setTimeout(resolve, NETWORK_DELAY));
     
-    // Simulace náhodné chyby (5%)
     if (Math.random() < 0.05) {
         throw new Error('Síťová chyba - zkuste to znovu');
     }
     
-    const url = endpoint.replace(/^\//, '');
+    const url = endpoint.replace(/^\
     const parts = url.split('/');
     const resource = parts[0];
     const id = parts[1];
@@ -232,12 +223,11 @@ function handleAuthRequest(method, action, data) {
             throw new Error('Neplatné přihlašovací údaje');
         }
 
-        // Simulace JWT tokenu
         const token = btoa(JSON.stringify({
             userId: user.id,
             email: user.email,
             role: user.role,
-            exp: Date.now() + 3600000 // 1 hodina
+            exp: Date.now() + 3600000
         }));
         
         return {
@@ -252,16 +242,4 @@ function handleAuthRequest(method, action, data) {
     }
     
     throw new Error('Neplatný auth požadavek');
-}
-
-export function resetMockDatabase() {
-    mockDatabase = {
-        vehicles: [...mockDatabase.vehicles],
-        reservations: [...mockDatabase.reservations],
-        users: [...mockDatabase.users]
-    };
-}
-
-export function getMockDatabase() {
-    return { ...mockDatabase };
 }

@@ -1,13 +1,6 @@
-/**
- * Pohled na seznam rezervací a detail rezervace
- */
-
 import { el, list, icon, button, statusBadge, input, select } from './components.js';
 import * as handlers from '../infrastructure/handlers.js';
 
-/**
- * Pohled na seznam rezervací
- */
 export function renderReservationsView(state, selectors) {
     const filteredReservations = selectors.selectFilteredReservations(state);
     const counts = selectors.selectReservationCounts(state);
@@ -117,9 +110,6 @@ function renderReservationRow(reservation, state) {
     );
 }
 
-/**
- * Pohled na detail rezervace
- */
 export function renderReservationDetailView(state, selectors) {
     const reservationId = state.ui.selectedReservationId;
     const data = selectors.selectReservationDetailData(state, reservationId);
@@ -198,8 +188,7 @@ export function renderReservationDetailView(state, selectors) {
             }, { variant: 'secondary', className: 'mt-4 w-full' })
         )
     );
-    
-    // Historie stavů (simulovaná)
+
     const history = el('div', { className: 'bg-white rounded-lg border border-gray-200' },
         el('div', { className: 'p-4 border-b border-gray-200' },
             el('h2', { className: 'text-lg font-semibold' }, 'Historie rezervace')
@@ -221,16 +210,14 @@ function renderDetailItem(label, value) {
 
 function renderTimeline(reservation) {
     const timeline = [];
-    
-    // Vytvoření
+
     timeline.push({
         status: 'NEW',
         label: 'Vytvořena',
         date: reservation.createdAt,
         active: ['NEW', 'CONFIRMED', 'ACTIVE', 'COMPLETED'].includes(reservation.status)
     });
-    
-    // Potvrzení
+
     if (reservation.status !== 'NEW' && reservation.status !== 'CANCELED') {
         timeline.push({
             status: 'CONFIRMED',
@@ -239,8 +226,7 @@ function renderTimeline(reservation) {
             active: ['CONFIRMED', 'ACTIVE', 'COMPLETED'].includes(reservation.status)
         });
     }
-    
-    // Aktivace
+
     if (reservation.actualStartDate || ['ACTIVE', 'COMPLETED'].includes(reservation.status)) {
         timeline.push({
             status: 'ACTIVE',
@@ -249,8 +235,7 @@ function renderTimeline(reservation) {
             active: ['ACTIVE', 'COMPLETED'].includes(reservation.status)
         });
     }
-    
-    // Dokončení
+
     if (reservation.status === 'COMPLETED') {
         timeline.push({
             status: 'COMPLETED',
@@ -259,8 +244,7 @@ function renderTimeline(reservation) {
             active: true
         });
     }
-    
-    // Zrušení
+
     if (reservation.status === 'CANCELED') {
         timeline.push({
             status: 'CANCELED',

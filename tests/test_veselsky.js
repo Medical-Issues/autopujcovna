@@ -1,9 +1,3 @@
-/**
- * Testy pro VeselskyJan - State Management, Dispatcher, Async, Router
- * Spustit: node tests/test_veselsky.js (v Node) nebo import do konzole
- */
-
-// Test runner
 function describe(name, fn) {
     console.log(`\n📦 ${name}`);
     fn();
@@ -49,7 +43,7 @@ function expect(actual) {
     };
 }
 
-// Mock stavu
+
 const mockState = {
     vehicles: {
         byId: {
@@ -74,12 +68,12 @@ const mockState = {
     }
 };
 
-// ==================== TESTY IR01: State Management ====================
+
 
 describe('IR01: State Management', () => {
     
     it('getState() vrací aktuální stav', () => {
-        // Simulace getState
+        
         const state = { ...mockState };
         expect(state.auth.isAuthenticated).toBe(true);
         expect(state.vehicles.allIds.length).toBe(2);
@@ -87,7 +81,7 @@ describe('IR01: State Management', () => {
 
     it('mutate() mění stav správně', () => {
         const state = { ...mockState };
-        // Simulace mutace
+        
         state.vehicles.byId['v3'] = { id: 'v3', brand: 'BMW', status: 'DRAFT' };
         state.vehicles.allIds.push('v3');
         
@@ -99,7 +93,7 @@ describe('IR01: State Management', () => {
         let notified = false;
         const subscriber = () => { notified = true; };
         
-        // Simulace subscribe a notify
+        
         subscriber();
         expect(notified).toBeTruthy();
     });
@@ -112,7 +106,7 @@ describe('IR01: State Management', () => {
     });
 });
 
-// ==================== TESTY IR02: Dispatcher ====================
+
 
 describe('IR02: Dispatcher', () => {
     
@@ -158,7 +152,7 @@ describe('IR02: Dispatcher', () => {
     });
 });
 
-// ==================== TESTY IR03: Async Operations ====================
+
 
 describe('IR03: Async Operations', () => {
     
@@ -173,7 +167,7 @@ describe('IR03: Async Operations', () => {
     it('FETCH_VEHICLES nastavuje loading stav', async () => {
         let loadingState;
         
-        // Simulace loading stavu
+        
         loadingState = true;
         expect(loadingState).toBeTruthy();
         
@@ -186,7 +180,7 @@ describe('IR03: Async Operations', () => {
         const mockError = new Error('Network error');
         let errorCaught = false;
         
-        // Simulace async operace s chybou
+        
         const asyncOperation = async () => {
             throw mockError;
         };
@@ -201,12 +195,12 @@ describe('IR03: Async Operations', () => {
     });
 });
 
-// ==================== TESTY IR04: Router ====================
+
 
 describe('IR04: Router', () => {
     
     it('getCurrentView() parsuje URL správně', () => {
-        // Simulace URL parsing
+        
         const hash = '#/vehicles/detail/123';
         const parts = hash.replace('#/', '').split('/');
         
@@ -216,7 +210,7 @@ describe('IR04: Router', () => {
     it('navigate() mění URL', () => {
         let currentHash = '#/vehicles';
         
-        // Simulace navigace
+        
         const navigate = (view) => {
             currentHash = `#/${view}`;
         };
@@ -229,7 +223,7 @@ describe('IR04: Router', () => {
         const state = { ui: { currentView: 'vehicles' } };
         const hash = '#/reservations';
         
-        // Simulace sync
+        
         if (hash.includes('reservations')) {
             state.ui.currentView = 'reservations';
         }
@@ -238,7 +232,7 @@ describe('IR04: Router', () => {
     });
 });
 
-// ==================== TESTY Vehicle FSM ====================
+
 
 describe('Vehicle FSM: Stavy a přechody', () => {
     
@@ -272,7 +266,7 @@ describe('Vehicle FSM: Stavy a přechody', () => {
     });
 });
 
-// ==================== VÝSLEDEK ====================
+
 
 console.log('\n' + '='.repeat(50));
 console.log('TESTY DOKONČENY');

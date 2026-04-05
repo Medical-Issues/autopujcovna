@@ -1,9 +1,3 @@
-/**
- * Vehicle Entity - Business entita Vozidlo
- * Odpovědnost: Veselský Jan
- * Reprezentuje konkrétní automobil v půjčovně
- */
-
 import { generateId } from '../utils/crypto.js';
 
 export const VehicleStatus = {
@@ -37,17 +31,11 @@ export class Vehicle {
         this.updatedAt = data.updatedAt || new Date().toISOString();
     }
 
-    /**
-     * Kontrola, zda je přechod mezi stavy povolen
-     */
     canTransitionTo(newStatus) {
         const allowedTransitions = VehicleTransitions[this.status] || [];
         return allowedTransitions.includes(newStatus);
     }
 
-    /**
-     * Aktualizace stavu vozidla s validací přechodu
-     */
     updateStatus(newStatus, userRole) {
         if (!this.canTransitionTo(newStatus)) {
             return {
@@ -56,7 +44,6 @@ export class Vehicle {
             };
         }
 
-        // Validace práv pro přechody
         const adminTransitions = [
             VehicleStatus.MAINTENANCE,
             VehicleStatus.DECOMMISSIONED,
@@ -76,10 +63,6 @@ export class Vehicle {
         return { success: true, vehicle: this };
     }
 
-    /**
-     * Aktualizace stavu tachometru
-     * Invariant: Nový stav nesmí být nižší než předchozí
-     */
     updateMileage(newMileage) {
         if (newMileage < this.mileage) {
             return {
@@ -94,17 +77,10 @@ export class Vehicle {
         return { success: true, vehicle: this };
     }
 
-    /**
-     * Kontrola dostupnosti vozidla pro rezervaci
-     */
     checkAvailability() {
         return this.status === VehicleStatus.AVAILABLE;
     }
 
-    /**
-     * Validace před vytvořením rezervace
-     * Invariant: Vozidlo ve stavu RENTED nelze smazat ani vyřadit
-     */
     canDeleteOrDecommission() {
         if (this.status === VehicleStatus.RENTED) {
             return {
@@ -115,10 +91,6 @@ export class Vehicle {
         return { success: true };
     }
 
-    /**
-     * Kontrola, zda lze vytvořit rezervaci
-     * Invariant: Pokud status ≠ AVAILABLE, nelze vytvářet nové CONFIRMED rezervace
-     */
     canCreateReservation() {
         if (this.status !== VehicleStatus.AVAILABLE) {
             return {
@@ -150,9 +122,6 @@ export class Vehicle {
     }
 }
 
-/**
- * Factory function pro vytvoření nového vozidla
- */
 export function createVehicle(data) {
     return new Vehicle(data);
 }

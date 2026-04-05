@@ -1,13 +1,5 @@
-/**
- * Router (IR04) - Navigační logika
- * Odpovědnost: Veselský Jan
- * Zajišťuje: mapování URL na aplikační kontext, synchronizaci adresy prohlížeče se stavem,
- *            převod URL → akce, reakci na změny historie
- */
-
 import { dispatch } from './dispatcher.js';
 
-// Definice rout
 const routes = {
     '/': { view: 'vehicles', title: 'Vozidla' },
     '/vehicles': { view: 'vehicles', title: 'Vozidla' },
@@ -16,9 +8,6 @@ const routes = {
     '/reservations/:id': { view: 'reservation-detail', title: 'Detail rezervace' }
 };
 
-/**
- * Parsování URL a extrakce parametrů
- */
 function parseUrl(url) {
     const path = url.replace(window.location.origin, '').replace(/^#/, '');
     const parts = path.split('/').filter(p => p);
@@ -50,9 +39,6 @@ function parseUrl(url) {
     return { view: 'not-found', title: 'Stránka nenalezena', params: {}, path };
 }
 
-/**
- * Aktualizace URL podle stavu aplikace
- */
 export function updateUrlFromState(state) {
     const { currentView, selectedVehicleId, selectedReservationId } = state.ui;
     
@@ -82,17 +68,12 @@ export function updateUrlFromState(state) {
     }
 }
 
-/**
- * Zpracování změny URL
- */
 export function handleRouteChange() {
     const hash = window.location.hash || '#/';
     const routeInfo = parseUrl(hash);
-    
-    // Aktualizace titulu stránky
+
     document.title = `${routeInfo.title} - Rezervační systém autopůjčovny`;
-    
-    // Dispatch navigace
+
     const navigatePayload = { view: routeInfo.view };
     
     if (routeInfo.params.id) {
@@ -111,40 +92,16 @@ export function handleRouteChange() {
     return routeInfo;
 }
 
-/**
- * Inicializace routeru
- */
 export function initRouter() {
-    // Poslouchání změn historie
+    
     window.addEventListener('popstate', () => {
         handleRouteChange();
     });
     
-    // Zpracování initial URL
+    
     handleRouteChange();
 }
 
-/**
- * Programatická navigace
- */
 export function navigateTo(path) {
     window.location.hash = path;
-}
-
-/**
- * Generování linku
- */
-export function generateLink(view, id = null) {
-    switch (view) {
-        case 'vehicles':
-            return '#/vehicles';
-        case 'vehicle-detail':
-            return id ? `#/vehicles/${id}` : '#/vehicles';
-        case 'reservations':
-            return '#/reservations';
-        case 'reservation-detail':
-            return id ? `#/reservations/${id}` : '#/reservations';
-        default:
-            return '#/';
-    }
 }

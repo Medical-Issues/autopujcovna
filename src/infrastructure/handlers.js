@@ -1,14 +1,5 @@
-/**
- * Handlery a vazba UI → akce (IR07)
- * Odpovědnost: Málek Jan
- * Zajišťuje: definici handlerů (onReserve, onCancel), mapování interakcí na dispatch(action),
- *            izolaci UI od business logiky
- * Invariant: Žádná přímá mutace stavu z UI, žádná autorizace v UI
- */
-
 import { dispatch } from './dispatcher.js';
 
-// ----- Vehicle Handlers -----
 
 export function onCreateVehicle(vehicleData) {
     return dispatch({
@@ -38,7 +29,7 @@ export function onDeleteVehicle(vehicleId) {
     });
 }
 
-// ----- Reservation Handlers -----
+
 
 export function onCreateReservation(reservationData) {
     return dispatch({
@@ -75,7 +66,7 @@ export function onCancelReservation(reservationId, reason) {
     });
 }
 
-// ----- Navigation Handlers -----
+
 
 export function onNavigate(view, params = {}) {
     return dispatch({
@@ -109,7 +100,7 @@ export function onSelectReservation(reservationId) {
     });
 }
 
-// ----- Filter Handlers -----
+
 
 export function onSetVehicleFilters(filters) {
     return dispatch({
@@ -125,7 +116,7 @@ export function onSetReservationFilters(filters) {
     });
 }
 
-// ----- Auth Handlers -----
+
 
 export function onLogin(credentials) {
     return dispatch({
@@ -138,7 +129,7 @@ export function onLogout() {
     return dispatch({ type: 'LOGOUT' });
 }
 
-// ----- Notification Handlers -----
+
 
 export function onRemoveNotification(notificationId) {
     return dispatch({

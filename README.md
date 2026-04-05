@@ -1,6 +1,6 @@
 # Rezervační systém autopůjčovny
 
-Semestrální projekt TNPW2 - Týmová spolupráce na vývoji aplikace.
+Semestrální projekt TNPW2
 
 ## Členové týmu a rozdělení odpovědnosti
 

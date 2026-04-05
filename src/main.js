@@ -1,7 +1,3 @@
-/**
- * Hlavní vstupní bod aplikace
- */
-
 import { getState, subscribe } from './infrastructure/state.js';
 import { dispatch } from './infrastructure/dispatcher.js';
 import { initRouter } from './infrastructure/router.js';
@@ -13,40 +9,34 @@ import { renderNavigation, renderNotifications, renderFooter, renderDashboardSum
 import { renderLoginModal } from './views/auth.js';
 import { el, clear } from './views/components.js';
 
-// Hlavní aplikační kontejner
 const appElement = document.getElementById('app');
 
-/**
- * Hlavní render funkce
- */
 function render() {
     const state = getState();
     const { currentView } = state.ui;
     
-    // Vyčištění kontejneru
     clear(appElement);
     
-    // Pokud není uživatel přihlášen, zobrazit login
     if (!state.auth.isAuthenticated) {
-        // Můžeme zobrazit přihlašovací obrazovku nebo pokračovat s omezenými právy
-        // Pro demo účely pokračujeme
+        
+        
     }
     
-    // Sestavení UI
+    
     const layout = el('div', { className: 'min-h-screen' });
     
-    // Navigace
+    
     layout.appendChild(renderNavigation(state));
     
-    // Hlavní obsah
+    
     const mainContent = el('main', { className: 'max-w-6xl mx-auto px-4 py-6' });
     
-    // Dashboard summary na hlavní stránce
+    
     if (currentView === 'vehicles' || currentView === 'reservations') {
         mainContent.appendChild(renderDashboardSummary(state, selectors));
     }
     
-    // Render aktuálního pohledu
+    
     let viewContent;
     switch (currentView) {
         case 'vehicles':
@@ -71,16 +61,16 @@ function render() {
     mainContent.appendChild(viewContent);
     layout.appendChild(mainContent);
     
-    // Footer
+    
     layout.appendChild(renderFooter());
     
-    // Notifikace (fixed position)
+    
     const notifications = renderNotifications(state);
     if (notifications) {
         layout.appendChild(notifications);
     }
     
-    // Modal
+    
     if (state.ui.modal.isOpen) {
         if (state.ui.modal.type === 'login') {
             const modalContainer = el('div', {
@@ -98,39 +88,30 @@ function render() {
             }
         }
     }
-    
-    // Přidání do DOM
+
     appElement.appendChild(layout);
 }
 
-/**
- * Inicializace aplikace
- */
 async function init() {
     console.log('[App] Inicializace...');
-    
-    // Inicializace routeru
+
     initRouter();
-    
-    // Registrace subscribera pro re-render
+
     subscribe((newState, oldState, mutation) => {
         console.log('[State] Změna:', mutation.type);
         render();
     });
-    
-    // Načtení inicializačních dat
+
     try {
         await dispatch({ type: 'FETCH_VEHICLES' });
         await dispatch({ type: 'FETCH_RESERVATIONS' });
     } catch (error) {
         console.error('[App] Chyba při načítání dat:', error);
     }
-    
-    // První render
+
     render();
     
     console.log('[App] Inicializace dokončena');
 }
 
-// Spuštění aplikace
 init();

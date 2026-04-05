@@ -87,19 +87,19 @@ mutate({ type: 'SET_USER', payload: user });
 Centrální bod pro všechny operace. Příklad průběhu:
 
 ```javascript
-// 1. UI vyvolá akci
+
 dispatch({ type: 'CREATE_RESERVATION', payload: { vehicleId: 'v1', ... } });
 
-// 2. Dispatcher najde handler
+
 const handler = actionHandlers.get('CREATE_RESERVATION');
 
-// 3. Handler provede business logiku
+
 const result = await handler(payload, getState);
 
-// 4. Handler volá mutate() pro změnu stavu
+
 mutate({ type: 'ADD_RESERVATION', payload: savedReservation });
 
-// 5. UI se přerenderuje díky subscriberům
+
 ```
 
 #### Bezpečnost:
@@ -142,9 +142,9 @@ DECOMMISSIONED  MAINTENANCE
 #### Autorizace:
 ```javascript
 vehicle.updateStatus(newStatus, userRole)
-// admin: všechny přechody
-// employee: jen některé (např. AVAILABLE → RENTED)
-// guest: žádné
+
+
+
 ```
 
 #### Invarianty:
@@ -170,23 +170,23 @@ CANCELED  CANCELED
 
 #### Invarianty:
 ```javascript
-// 1. Zákazník může mít max 1 ACTIVE rezervaci
+
 const customerActive = reservations.filter(
     r => r.customerEmail === email && r.status === 'ACTIVE'
 );
 if (customerActive.length > 0) throw Error('Již má aktivní rezervaci');
 
-// 2. Datum vrácení musí být po vyzvednutí
+
 if (endDate <= startDate) throw Error('Neplatné datum');
 
-// 3. Vozidlo musí být AVAILABLE pro novou rezervaci
-vehicle.canCreateReservation(); // kontrola stavu
+
+vehicle.canCreateReservation(); 
 ```
 
 #### Cenotvorba:
 ```javascript
 reservation.calculateTotalPrice(dailyRate);
-// Počítá: počet dní × dailyRate
+
 ```
 
 ---
@@ -305,20 +305,20 @@ Převádí uživatelské interakce na dispatch akcí:
 ```javascript
 export function createHandlers(dispatch) {
     return {
-        // Auth
+        
         onLogin: (credentials) => dispatch({ type: 'LOGIN', payload: credentials }),
         onLogout: () => dispatch({ type: 'LOGOUT' }),
         
-        // Navigation
+        
         onNavigate: (view) => dispatch({ type: 'NAVIGATE', payload: { view } }),
         
-        // Vehicles
+        
         onUpdateVehicleStatus: (id, status) => 
             dispatch({ type: 'UPDATE_VEHICLE_STATUS', payload: { vehicleId: id, newStatus: status } }),
         onDeleteVehicle: (id) => 
             dispatch({ type: 'DELETE_VEHICLE', payload: { vehicleId: id } }),
         
-        // Reservations
+        
         onCreateReservation: (data) => 
             dispatch({ type: 'CREATE_RESERVATION', payload: data }),
         onConfirmReservation: (id) => 
@@ -330,7 +330,7 @@ export function createHandlers(dispatch) {
         onCancelReservation: (id, reason) => 
             dispatch({ type: 'CANCEL_RESERVATION', payload: { reservationId: id, reason } }),
         
-        // UI
+        
         onOpenModal: (type, data) => 
             dispatch({ type: 'OPEN_MODAL', payload: { type, data } }),
         onCloseModal: () => dispatch({ type: 'CLOSE_MODAL' }),
@@ -345,17 +345,17 @@ export function createHandlers(dispatch) {
 Inicializace aplikace:
 
 ```javascript
-// 1. Registrace všech action handlerů
+
 registerAllActions();
 
-// 2. Načtení dat z API
+
 dispatch({ type: 'FETCH_VEHICLES' });
 dispatch({ type: 'FETCH_RESERVATIONS' });
 
-// 3. První render
+
 render();
 
-// 4. Subscribe na změny stavu pro re-render
+
 subscribe(() => render());
 ```
 
@@ -366,10 +366,10 @@ subscribe(() => render());
 ### 7.1 Vytvoření rezervace
 
 ```javascript
-// 1. Uživatel klikne "Rezervovat" na vozidle
+
 handlers.onOpenModal('createReservation', { vehicleId: 'v1' });
 
-// 2. Vyplní formulář a odešle
+
 handlers.onCreateReservation({
     vehicleId: 'v1',
     customerName: 'Jan Novák',
@@ -378,62 +378,62 @@ handlers.onCreateReservation({
     endDate: '2024-01-20'
 });
 
-// 3. Dispatcher provede:
-// - Kontrola dostupnosti vozidla
-// - Kontrola invariantu (max 1 ACTIVE)
-// - Výpočet ceny
-// - Volání API
-// - Mutace stavu
 
-// 4. UI se přerenderuje s novou rezervací
+
+
+
+
+
+
+
 ```
 
 ### 7.2 Změna stavu rezervace
 
 ```javascript
-// Zaměstnanec potvrdí rezervaci
+
 handlers.onConfirmReservation('r1');
 
-// Dispatcher:
-// - Změní stav: NEW → CONFIRMED
-// - Zkontroluje práva uživatele
-// - Aktualizuje stav vozidla
 
-// Při vyzvednutí vozidla:
+
+
+
+
+
 handlers.onActivateReservation('r1');
-// - Stav: CONFIRMED → ACTIVE
-// - Vozidlo: AVAILABLE → RENTED
-// - Kontrola: zákazník nemá jinou ACTIVE rezervaci
 
-// Při vrácení:
+
+
+
+
 handlers.onCompleteReservation('r1', 45200);
-// - Stav: ACTIVE → COMPLETED
-// - Vozidlo: RENTED → AVAILABLE
-// - Aktualizace tachometru na 45200 km
+
+
+
 ```
 
 ### 7.3 Autorizace
 
 ```javascript
-// Admin může všechno
+
 if (userRole === 'admin') {
-    // Smazat vozidlo
-    // Změnit jakýkoliv stav
-    // Vidět všechny rezervace
+    
+    
+    
 }
 
-// Employee má omezená práva
+
 if (userRole === 'employee') {
-    // Vytvářet rezervace
-    // Aktivovat/vracení vozidel
-    // Nemůže: mazat vozidla, měnit ceny
+    
+    
+    
 }
 
-// Guest (nepřihlášený)
+
 if (!isAuthenticated) {
-    // Jen prohlížet dostupná vozidla
-    // Vytvořit rezervaci (bez přihlášení)
-    // Nemůže: měnit stavy, spravovat
+    
+    
+    
 }
 ```
 
@@ -448,11 +448,11 @@ if (!isAuthenticated) {
 
 ### 8.2 Autorizace
 ```
-// Správně - role ze stavu:
+
 const userRole = getState().auth.user?.role;
 
-// Špatně - role z UI:
-function handler(data, userRole) { ... } // MOŽNÝ ÚTOK!
+
+function handler(data, userRole) { ... } 
 ```
 
 ### 8.3 Validace dat
@@ -463,7 +463,7 @@ function handler(data, userRole) { ... } // MOŽNÝ ÚTOK!
 
 ### 8.4 Invarianty
 ```
-// Kontrolováno vždy:
+
 - Max 1 ACTIVE rezervace na zákazníka
 - Vozidlo není dvakrát půjčeno současně
 - Tachometr neroste zpětně

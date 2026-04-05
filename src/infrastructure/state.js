@@ -1,15 +1,7 @@
-/**
- * State Management (IR01) - Správa stavu aplikace
- * Odpovědnost: Veselský Jan
- * Zajišťuje: návrh globálního stavu, inicializaci, oddělení doménových/technických dat, řízené aktualizace
- */
-
 import { Vehicle } from '../entities/Vehicle.js';
 import { Reservation } from '../entities/Reservation.js';
 
-// Počáteční stav aplikace
 export const initialState = {
-    // Doménová data
     vehicles: {
         byId: {},
         allIds: [],
@@ -22,15 +14,13 @@ export const initialState = {
         loading: false,
         error: null
     },
-    
-    // UI stav
     ui: {
-        currentView: 'vehicles', // 'vehicles', 'reservations', 'vehicle-detail', 'reservation-detail'
+        currentView: 'vehicles',
         selectedVehicleId: null,
         selectedReservationId: null,
         modal: {
             isOpen: false,
-            type: null, // 'create-vehicle', 'edit-vehicle', 'create-reservation', 'edit-reservation'
+            type: null, 
             data: null
         },
         notifications: [],
@@ -46,7 +36,7 @@ export const initialState = {
         }
     },
     
-    // Autentizace
+    
     auth: {
         user: null,
         isAuthenticated: false,
@@ -56,31 +46,19 @@ export const initialState = {
     }
 };
 
-// Aktuální stav aplikace
 let currentState = JSON.parse(JSON.stringify(initialState));
 
-// Subscribers pro notifikace o změnách
 const subscribers = new Set();
 
-/**
- * Získání aktuálního stavu
- * Vrací immutable kopii stavu
- */
 export function getState() {
     return JSON.parse(JSON.stringify(currentState));
 }
 
-/**
- * Registrace subscribera pro změny stavu
- */
 export function subscribe(callback) {
     subscribers.add(callback);
     return () => subscribers.delete(callback);
 }
 
-/**
- * Notifikace všech subscriberů o změně stavu
- */
 function notifySubscribers(oldState, newState, mutation) {
     subscribers.forEach(callback => {
         try {
@@ -91,15 +69,11 @@ function notifySubscribers(oldState, newState, mutation) {
     });
 }
 
-/**
- * Mutace stavu - jediný způsob, jak měnit stav
- * Invariant: Žádná přímá mutace stavu mimo dispatcher
- */
 export function mutate(mutation) {
     const oldState = getState();
     
     switch (mutation.type) {
-        // Vehicle mutations
+        
         case 'SET_VEHICLES':
             currentState.vehicles.byId = mutation.payload.reduce((acc, v) => {
                 acc[v.id] = v instanceof Vehicle ? v.toJSON() : v;
@@ -146,7 +120,7 @@ export function mutate(mutation) {
             currentState.vehicles.error = mutation.payload;
             break;
             
-        // Reservation mutations
+        
         case 'SET_RESERVATIONS':
             currentState.reservations.byId = mutation.payload.reduce((acc, r) => {
                 acc[r.id] = r instanceof Reservation ? r.toJSON() : r;
@@ -193,7 +167,7 @@ export function mutate(mutation) {
             currentState.reservations.error = mutation.payload;
             break;
             
-        // UI mutations
+        
         case 'SET_CURRENT_VIEW':
             currentState.ui.currentView = mutation.payload;
             break;
@@ -250,7 +224,7 @@ export function mutate(mutation) {
             };
             break;
             
-        // Auth mutations
+        
         case 'SET_USER':
             currentState.auth.user = mutation.payload;
             currentState.auth.isAuthenticated = !!mutation.payload;
@@ -287,22 +261,16 @@ export function mutate(mutation) {
             return false;
     }
     
-    // Notifikace subscriberů
+    
     notifySubscribers(oldState, getState(), mutation);
     
     return true;
 }
 
-/**
- * Reset stavu na počáteční hodnoty
- */
 export function resetState() {
     mutate({ type: 'RESET_STATE' });
 }
 
-/**
- * Helper pro sériové mutace
- */
 export function batchMutations(mutations) {
     const oldState = getState();
     
@@ -310,6 +278,6 @@ export function batchMutations(mutations) {
         mutate(mutation);
     });
     
-    // Jedna notifikace po všech mutacích
+    
     notifySubscribers(oldState, getState(), { type: 'BATCH', mutations });
 }

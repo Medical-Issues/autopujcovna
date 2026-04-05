@@ -1,17 +1,6 @@
-/**
- * Autentizace a autorizace (IR08)
- * Odpovědnost: Málek Jan
- * Zajišťuje: uložení identity uživatele, práci s tokenem,
- *            inicializaci autentizačního stavu, předávání identity API vrstvě
- * Invariant: Žádná autorizace v UI, rozhodování co smí uživatel dělat je business logika
- */
-
 import { el, icon, button, input } from './components.js';
 import * as handlers from '../infrastructure/handlers.js';
 
-/**
- * Pohled na přihlášení
- */
 export function renderLoginView(onLogin) {
     const formData = {
         email: '',
@@ -67,9 +56,6 @@ export function renderLoginView(onLogin) {
     );
 }
 
-/**
- * Login modal (pro použití v modalu)
- */
 export function renderLoginModal() {
     const formData = {
         email: '',

@@ -1,13 +1,6 @@
-/**
- * Modalní okna a formuláře
- */
-
 import { el, button, input, select } from './components.js';
 import * as handlers from '../infrastructure/handlers.js';
 
-/**
- * Render modal podle typu
- */
 export function renderModal(state, _selectors) {
     const { modal } = state.ui;
     

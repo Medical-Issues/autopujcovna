@@ -1,6 +1,3 @@
-/* Hlavní styly pro AutoPůjčovna */
-
-/* Reset a základní styly */
 * {
     margin: 0;
     padding: 0;
@@ -14,7 +11,6 @@ body {
     line-height: 1.5;
 }
 
-/* Utility třídy */
 .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -22,7 +18,6 @@ body {
     overflow: hidden;
 }
 
-/* Animace */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -45,25 +40,21 @@ body {
     }
 }
 
-/* Notifikace animace */
 [data-notification-id] {
     animation: slideIn 0.3s ease-out;
 }
 
-/* Formuláře - dodatečné styly */
 input:focus,
 select:focus,
 textarea:focus {
     outline: none;
 }
 
-/* Tlačítka - dodatečné styly */
 button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-/* Timeline pro rezervace */
 .timeline-item {
     position: relative;
     padding-left: 2rem;
@@ -83,7 +74,6 @@ button:disabled {
     display: none;
 }
 
-/* Responzivní úpravy */
 @media (max-width: 768px) {
     .max-w-6xl {
         padding-left: 1rem;
@@ -91,7 +81,6 @@ button:disabled {
     }
 }
 
-/* Scrollbar styly */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -110,7 +99,6 @@ button:disabled {
     background: #64748b;
 }
 
-/* Status badge barevné varianty */
 .status-badge {
     display: inline-flex;
     align-items: center;
@@ -120,14 +108,12 @@ button:disabled {
     font-weight: 500;
 }
 
-/* Grid layout pomocné třídy */
 .grid-auto-fit {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1rem;
 }
 
-/* Hover efekty */
 .hover-lift {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -137,7 +123,6 @@ button:disabled {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Loading skeleton */
 @keyframes skeleton {
     0% {
         background-position: -200% 0;
