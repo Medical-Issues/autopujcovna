@@ -111,7 +111,7 @@ export function renderFooter() {
             '© 2024 AutoPůjčovna - Semestrální projekt TNPW2'
         ),
         el('p', { className: 'text-xs text-gray-400 mt-1' },
-            'Veselský Jan (Vehicle, State, Dispatcher, Async, Router) | Málek Jan (Reservation, Selectors, Views, Handlers, Auth)'
+            'Veselský Jan | Málek Jan'
         )
     );
 }
