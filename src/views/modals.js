@@ -42,7 +42,7 @@ export function renderModal(state, _selectors) {
 function renderCreateVehicleModal() {
     const formData = {};
     
-    const form = el('form', {
+    return el('form', {
         className: 'space-y-4',
         onSubmit: (e) => {
             e.preventDefault();
@@ -88,8 +88,6 @@ function renderCreateVehicleModal() {
             })
         )
     );
-    
-    return form;
 }
 
 function renderCreateReservationModal(state, data) {
@@ -110,7 +108,7 @@ function renderCreateReservationModal(state, data) {
             label: `${v.brand} ${v.model} (${v.licensePlate || 'bez SPZ'})`
         }));
     
-    const form = el('form', {
+    return el('form', {
         className: 'space-y-4',
         onSubmit: (e) => {
             e.preventDefault();
@@ -152,8 +150,6 @@ function renderCreateReservationModal(state, data) {
             })
         )
     );
-    
-    return form;
 }
 
 function renderCompleteReservationModal(state, data) {
@@ -174,7 +170,7 @@ function renderCompleteReservationModal(state, data) {
         notes: ''
     };
     
-    const form = el('form', {
+    return el('form', {
         className: 'space-y-4',
         onSubmit: (e) => {
             e.preventDefault();
@@ -219,6 +215,4 @@ function renderCompleteReservationModal(state, data) {
             })
         )
     );
-    
-    return form;
 }
