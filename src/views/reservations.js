@@ -64,18 +64,18 @@ function renderReservationRow(reservation, state) {
     if (reservation.status === 'NEW') {
         statusActions.push(button('Potvrdit', (e) => {
             e.stopPropagation();
-            handlers.onConfirmReservation(reservation.id, userRole);
+            handlers.onConfirmReservation(reservation.id);
         }, { variant: 'success', size: 'sm', disabled: !isAuthenticated }));
         statusActions.push(button('Zrušit', (e) => {
             e.stopPropagation();
-            handlers.onCancelReservation(reservation.id, userRole, 'Zrušeno operátorem');
+            handlers.onCancelReservation(reservation.id, 'Zrušeno operátorem');
         }, { variant: 'danger', size: 'sm', disabled: !isAuthenticated }));
     }
     
     if (reservation.status === 'CONFIRMED') {
         statusActions.push(button('Vydat vozidlo', (e) => {
             e.stopPropagation();
-            handlers.onActivateReservation(reservation.id, userRole);
+            handlers.onActivateReservation(reservation.id);
         }, { variant: 'primary', size: 'sm', disabled: !isAuthenticated }));
     }
     
@@ -155,14 +155,14 @@ export function renderReservationDetailView(state, selectors) {
         ),
         el('div', { className: 'flex gap-2' },
             canActivate && isAuthenticated && button('Vydat vozidlo', () => {
-                handlers.onActivateReservation(reservation.id, userRole);
+                handlers.onActivateReservation(reservation.id);
             }, { variant: 'primary', icon: icon('key', 18) }),
             canComplete && isAuthenticated && button('Přijmout vozidlo', () => {
                 handlers.onOpenModal('complete-reservation', { reservationId: reservation.id });
             }, { variant: 'success', icon: icon('check', 18) }),
             canCancel && isAuthenticated && button('Zrušit rezervaci', () => {
                 if (confirm('Opravdu chcete zrušit tuto rezervaci?')) {
-                    handlers.onCancelReservation(reservation.id, userRole, 'Zrušeno uživatelem');
+                    handlers.onCancelReservation(reservation.id, 'Zrušeno uživatelem');
                 }
             }, { variant: 'danger', icon: icon('x', 18) })
         )

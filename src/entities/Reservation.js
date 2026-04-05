@@ -106,8 +106,9 @@ export class Reservation {
 
     /**
      * Přechod do stavu ACTIVE (fyzické předání vozu)
+     * Invariant: Zákazník může mít v daném čase max jednu ACTIVE rezervaci
      */
-    confirmPickup(userRole) {
+    confirmPickup(userRole, existingReservations = []) {
         if (!this.canTransitionTo(ReservationStatus.ACTIVE)) {
             return {
                 success: false,
@@ -119,6 +120,20 @@ export class Reservation {
             return {
                 success: false,
                 error: 'Nedostatečná práva pro tuto operaci'
+            };
+        }
+
+        // Invariant: Zákazník může mít max jednu ACTIVE rezervaci
+        const customerActiveReservations = existingReservations.filter(
+            r => r.customerEmail === this.customerEmail && 
+                 r.status === ReservationStatus.ACTIVE && 
+                 r.id !== this.id
+        );
+        
+        if (customerActiveReservations.length > 0) {
+            return {
+                success: false,
+                error: 'Zákazník již má aktivní rezervaci - nelze mít více než jednu současně'
             };
         }
 

@@ -189,26 +189,25 @@ function renderDetailItem(label, value) {
 
 function renderStatusActions(vehicle, state) {
     const actions = [];
-    const userRole = state.auth.user?.role || 'guest';
     
     // DRAFT → AVAILABLE
     if (vehicle.status === 'DRAFT') {
         actions.push(button('Aktivovat (Dostupné)', () => {
-            handlers.onUpdateVehicleStatus(vehicle.id, 'AVAILABLE', userRole);
+            handlers.onUpdateVehicleStatus(vehicle.id, 'AVAILABLE');
         }, { variant: 'success', className: 'w-full', disabled: !state.auth.isAuthenticated }));
     }
     
     // AVAILABLE → MAINTENANCE
     if (vehicle.status === 'AVAILABLE') {
         actions.push(button('Odeslat do servisu', () => {
-            handlers.onUpdateVehicleStatus(vehicle.id, 'MAINTENANCE', userRole);
+            handlers.onUpdateVehicleStatus(vehicle.id, 'MAINTENANCE');
         }, { variant: 'secondary', className: 'w-full', icon: icon('tool', 16), disabled: !state.auth.isAuthenticated }));
     }
     
     // MAINTENANCE → AVAILABLE
     if (vehicle.status === 'MAINTENANCE') {
         actions.push(button('Servis dokončen', () => {
-            handlers.onUpdateVehicleStatus(vehicle.id, 'AVAILABLE', userRole);
+            handlers.onUpdateVehicleStatus(vehicle.id, 'AVAILABLE');
         }, { variant: 'success', className: 'w-full', disabled: !state.auth.isAuthenticated }));
     }
     
@@ -216,7 +215,7 @@ function renderStatusActions(vehicle, state) {
     if (vehicle.status === 'AVAILABLE' || vehicle.status === 'MAINTENANCE') {
         actions.push(button('Vyřadit z provozu', () => {
             if (confirm('Opravdu chcete vyřadit toto vozidlo?')) {
-                handlers.onUpdateVehicleStatus(vehicle.id, 'DECOMMISSIONED', userRole);
+                handlers.onUpdateVehicleStatus(vehicle.id, 'DECOMMISSIONED');
             }
         }, { variant: 'danger', className: 'w-full', disabled: !state.auth.isAuthenticated }));
     }

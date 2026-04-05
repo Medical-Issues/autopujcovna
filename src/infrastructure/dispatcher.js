@@ -86,8 +86,10 @@ registerAction('CREATE_VEHICLE', async (payload, getState) => {
 });
 
 registerAction('UPDATE_VEHICLE_STATUS', async (payload, getState) => {
-    const { vehicleId, newStatus, userRole } = payload;
+    const { vehicleId, newStatus } = payload;
     const state = getState();
+    // Role se bere ze stavu, ne z UI - zabránění podvržení
+    const userRole = state.auth.user?.role || 'guest';
     const vehicleData = state.vehicles.byId[vehicleId];
     
     if (!vehicleData) {
@@ -250,8 +252,10 @@ registerAction('CREATE_RESERVATION', async (payload, getState) => {
 });
 
 registerAction('CONFIRM_RESERVATION', async (payload, getState) => {
-    const { reservationId, userRole } = payload;
+    const { reservationId } = payload;
     const state = getState();
+    // Role se bere ze stavu, ne z UI - zabránění podvržení
+    const userRole = state.auth.user?.role || 'guest';
     const reservationData = state.reservations.byId[reservationId];
     
     if (!reservationData) {
@@ -286,16 +290,21 @@ registerAction('CONFIRM_RESERVATION', async (payload, getState) => {
 });
 
 registerAction('ACTIVATE_RESERVATION', async (payload, getState) => {
-    const { reservationId, userRole } = payload;
+    const { reservationId } = payload;
     const state = getState();
+    // Role se bere ze stavu, ne z UI - zabránění podvržení
+    const userRole = state.auth.user?.role || 'guest';
     const reservationData = state.reservations.byId[reservationId];
     
     if (!reservationData) {
         return { success: false, error: 'Rezervace nenalezena' };
     }
     
+    // Připravit seznam všech rezervací pro kontrolu invariantu
+    const existingReservations = Object.values(state.reservations.byId);
+    
     const reservation = Reservation.fromJSON(reservationData);
-    const result = reservation.confirmPickup(userRole);
+    const result = reservation.confirmPickup(userRole, existingReservations);
     
     if (!result.success) {
         mutate({ 
@@ -314,8 +323,7 @@ registerAction('ACTIVATE_RESERVATION', async (payload, getState) => {
             type: 'UPDATE_VEHICLE_STATUS',
             payload: {
                 vehicleId: reservationData.vehicleId,
-                newStatus: VehicleStatus.RENTED,
-                userRole
+                newStatus: VehicleStatus.RENTED
             }
         });
         
@@ -330,8 +338,10 @@ registerAction('ACTIVATE_RESERVATION', async (payload, getState) => {
 });
 
 registerAction('COMPLETE_RESERVATION', async (payload, getState) => {
-    const { reservationId, userRole, finalMileage } = payload;
+    const { reservationId, finalMileage } = payload;
     const state = getState();
+    // Role se bere ze stavu, ne z UI - zabránění podvržení
+    const userRole = state.auth.user?.role || 'guest';
     const reservationData = state.reservations.byId[reservationId];
     
     if (!reservationData) {
@@ -358,8 +368,7 @@ registerAction('COMPLETE_RESERVATION', async (payload, getState) => {
             type: 'UPDATE_VEHICLE_STATUS',
             payload: {
                 vehicleId: reservationData.vehicleId,
-                newStatus: VehicleStatus.AVAILABLE,
-                userRole
+                newStatus: VehicleStatus.AVAILABLE
             }
         });
         
@@ -385,8 +394,10 @@ registerAction('COMPLETE_RESERVATION', async (payload, getState) => {
 });
 
 registerAction('CANCEL_RESERVATION', async (payload, getState) => {
-    const { reservationId, userRole, reason } = payload;
+    const { reservationId, reason } = payload;
     const state = getState();
+    // Role se bere ze stavu, ne z UI - zabránění podvržení
+    const userRole = state.auth.user?.role || 'guest';
     const reservationData = state.reservations.byId[reservationId];
     
     if (!reservationData) {

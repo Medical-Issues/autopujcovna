@@ -17,10 +17,10 @@ export function onCreateVehicle(vehicleData) {
     });
 }
 
-export function onUpdateVehicleStatus(vehicleId, newStatus, userRole) {
+export function onUpdateVehicleStatus(vehicleId, newStatus) {
     return dispatch({
         type: 'UPDATE_VEHICLE_STATUS',
-        payload: { vehicleId, newStatus, userRole }
+        payload: { vehicleId, newStatus }
     });
 }
 
@@ -47,31 +47,31 @@ export function onCreateReservation(reservationData) {
     });
 }
 
-export function onConfirmReservation(reservationId, userRole) {
+export function onConfirmReservation(reservationId) {
     return dispatch({
         type: 'CONFIRM_RESERVATION',
-        payload: { reservationId, userRole }
+        payload: { reservationId }
     });
 }
 
-export function onActivateReservation(reservationId, userRole) {
+export function onActivateReservation(reservationId) {
     return dispatch({
         type: 'ACTIVATE_RESERVATION',
-        payload: { reservationId, userRole }
+        payload: { reservationId }
     });
 }
 
-export function onCompleteReservation(reservationId, userRole, finalMileage) {
+export function onCompleteReservation(reservationId, finalMileage) {
     return dispatch({
         type: 'COMPLETE_RESERVATION',
-        payload: { reservationId, userRole, finalMileage }
+        payload: { reservationId, finalMileage }
     });
 }
 
-export function onCancelReservation(reservationId, userRole, reason) {
+export function onCancelReservation(reservationId, reason) {
     return dispatch({
         type: 'CANCEL_RESERVATION',
-        payload: { reservationId, userRole, reason }
+        payload: { reservationId, reason }
     });
 }
 
