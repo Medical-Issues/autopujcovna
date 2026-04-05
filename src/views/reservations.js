@@ -58,7 +58,7 @@ function renderReservationRow(reservation, state) {
     const endDate = new Date(reservation.endDate).toLocaleDateString('cs-CZ');
     
     const statusActions = [];
-    const userRole = state.auth.user?.role || 'guest';
+    const _userRole = state.auth.user?.role || 'guest';
     const isAuthenticated = state.auth.isAuthenticated;
     
     if (reservation.status === 'NEW') {
@@ -136,7 +136,7 @@ export function renderReservationDetailView(state, selectors) {
     }
     
     const { reservation, vehicle, canCancel, canActivate, canComplete } = data;
-    const userRole = state.auth.user?.role || 'guest';
+    const _userRole = state.auth.user?.role || 'guest';
     const isAuthenticated = state.auth.isAuthenticated;
     
     const startDate = new Date(reservation.startDate).toLocaleDateString('cs-CZ');

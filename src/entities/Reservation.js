@@ -54,7 +54,7 @@ export class Reservation {
      * Invariant: Datum vrácení musí být striktně po datu půjčení
      * Invariant: Vozidlo musí být AVAILABLE pro potvrzení
      */
-    static createReservation(data, vehicle) {
+    static createReservation(data, _vehicle) {
         // Validace dat
         if (!data.startDate || !data.endDate) {
             return {
@@ -82,7 +82,7 @@ export class Reservation {
      * Přechod do stavu CONFIRMED
      * Invariant: Pokud vehicle.status ≠ AVAILABLE, nelze přejít do CONFIRMED
      */
-    confirm(vehicle, userRole) {
+    confirm(vehicle, _userRole) {
         if (!this.canTransitionTo(ReservationStatus.CONFIRMED)) {
             return {
                 success: false,

@@ -50,7 +50,7 @@ export async function dispatch(action) {
 
 // ----- Vehicle Actions -----
 
-registerAction('FETCH_VEHICLES', async (payload, getState) => {
+registerAction('FETCH_VEHICLES', async () => {
     mutate({ type: 'SET_VEHICLES_LOADING', payload: true });
     
     try {
@@ -65,7 +65,7 @@ registerAction('FETCH_VEHICLES', async (payload, getState) => {
     }
 });
 
-registerAction('CREATE_VEHICLE', async (payload, getState) => {
+registerAction('CREATE_VEHICLE', async (payload) => {
     const vehicle = new Vehicle(payload);
     
     try {
@@ -184,7 +184,7 @@ registerAction('DELETE_VEHICLE', async (payload, getState) => {
 
 // ----- Reservation Actions -----
 
-registerAction('FETCH_RESERVATIONS', async (payload, getState) => {
+registerAction('FETCH_RESERVATIONS', async () => {
     mutate({ type: 'SET_RESERVATIONS_LOADING', payload: true });
     
     try {
@@ -430,7 +430,7 @@ registerAction('CANCEL_RESERVATION', async (payload, getState) => {
 
 // ----- UI Actions -----
 
-registerAction('NAVIGATE', async (payload, getState) => {
+registerAction('NAVIGATE', async (payload) => {
     mutate({ type: 'SET_CURRENT_VIEW', payload: payload.view });
     if (payload.vehicleId !== undefined) {
         mutate({ type: 'SELECT_VEHICLE', payload: payload.vehicleId });
@@ -441,22 +441,22 @@ registerAction('NAVIGATE', async (payload, getState) => {
     return { success: true };
 });
 
-registerAction('OPEN_MODAL', async (payload, getState) => {
+registerAction('OPEN_MODAL', async (payload) => {
     mutate({ type: 'OPEN_MODAL', payload });
     return { success: true };
 });
 
-registerAction('CLOSE_MODAL', async (payload, getState) => {
+registerAction('CLOSE_MODAL', async () => {
     mutate({ type: 'CLOSE_MODAL' });
     return { success: true };
 });
 
-registerAction('REMOVE_NOTIFICATION', async (payload, getState) => {
+registerAction('REMOVE_NOTIFICATION', async (payload) => {
     mutate({ type: 'REMOVE_NOTIFICATION', payload });
     return { success: true };
 });
 
-registerAction('SET_FILTERS', async (payload, getState) => {
+registerAction('SET_FILTERS', async (payload) => {
     if (payload.type === 'vehicles') {
         mutate({ type: 'SET_VEHICLE_FILTER', payload: payload.filters });
     } else if (payload.type === 'reservations') {
@@ -467,7 +467,7 @@ registerAction('SET_FILTERS', async (payload, getState) => {
 
 // ----- Auth Actions -----
 
-registerAction('LOGIN', async (payload, getState) => {
+registerAction('LOGIN', async (payload) => {
     mutate({ type: 'SET_AUTH_LOADING', payload: true });
     
     try {
@@ -483,7 +483,7 @@ registerAction('LOGIN', async (payload, getState) => {
     }
 });
 
-registerAction('LOGOUT', async (payload, getState) => {
+registerAction('LOGOUT', async () => {
     mutate({ type: 'LOGOUT' });
     return { success: true };
 });
