@@ -6,7 +6,7 @@
  * Invariant: Žádná přímá mutace stavu z UI, žádná autorizace v UI
  */
 
-import { dispatch } from '../infrastructure/dispatcher.js';
+import { dispatch } from './dispatcher.js';
 
 // ----- Vehicle Handlers -----
 

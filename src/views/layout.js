@@ -17,7 +17,7 @@ export function renderNavigation(state) {
         { view: 'reservations', label: 'Rezervace', icon: 'calendar' }
     ];
     
-    const nav = el('nav', { className: 'bg-white border-b border-gray-200 mb-6' },
+    return el('nav', { className: 'bg-white border-b border-gray-200 mb-6' },
         el('div', { className: 'max-w-6xl mx-auto px-4' },
             el('div', { className: 'flex items-center justify-between h-16' },
                 // Logo a brand
@@ -59,8 +59,6 @@ export function renderNavigation(state) {
             )
         )
     );
-    
-    return nav;
 }
 
 /**

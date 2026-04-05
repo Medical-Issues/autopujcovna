@@ -56,7 +56,7 @@ function parseUrl(url) {
 export function updateUrlFromState(state) {
     const { currentView, selectedVehicleId, selectedReservationId } = state.ui;
     
-    let newPath = '/';
+    let newPath;
     
     switch (currentView) {
         case 'vehicles':

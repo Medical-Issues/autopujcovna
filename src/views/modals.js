@@ -8,7 +8,7 @@ import * as handlers from '../infrastructure/handlers.js';
 /**
  * Render modal podle typu
  */
-export function renderModal(state, selectors) {
+export function renderModal(state, _selectors) {
     const { modal } = state.ui;
     
     if (!modal.isOpen) return null;

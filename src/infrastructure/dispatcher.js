@@ -39,8 +39,7 @@ export async function dispatch(action) {
     }
 
     try {
-        const result = await handler(action.payload, getState);
-        return result;
+        return await handler(action.payload, getState);
     } catch (error) {
         console.error('Error in action handler:', error);
         return { success: false, error: error.message };

@@ -119,7 +119,7 @@ export function renderVehicleDetailView(state, selectors) {
         );
     }
     
-    const { vehicle, reservations, isAvailable, canCreateReservation } = data;
+    const { vehicle, reservations, canCreateReservation } = data;
     
     const header = el('div', { className: 'flex items-center justify-between mb-6' },
         el('div', { className: 'flex items-center gap-4' },
