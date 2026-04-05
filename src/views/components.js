@@ -27,9 +27,6 @@ export function el(tag, attrs = {}, ...children) {
             });
         } else if (key === 'text') {
             element.textContent = value;
-        } else if (key === 'html') {
-            // WARNING: Použití innerHTML je rizikové, používejte pouze pro trusted content
-            element.innerHTML = value;
         } else if (key === 'disabled') {
             element.disabled = !!value;
         } else {
@@ -131,10 +128,21 @@ export function icon(name, size = 20) {
         list: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`
     };
     
-    const div = document.createElement('div');
-    // SVG je považováno za bezpečné, jelikož je definováno v kódu aplikace (ne uživatelský input)
-    div.innerHTML = icons[name] || icons.info;
-    return div.firstChild;
+    // SVG je bezpečné - pevně definované v kódu, ne uživatelský input
+    // Používáme DOMParser pro bezpečné zpracování bez innerHTML
+    const parser = new DOMParser();
+    const svgString = icons[name] || icons.info;
+    const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
+    
+    // Kontrola chyby parsování
+    if (svgDoc.getElementsByTagName('parsererror').length > 0) {
+        console.warn('SVG parse error for icon:', name);
+        return document.createElement('span');
+    }
+    
+    const svgElement = svgDoc.documentElement;
+    // Importujeme SVG element do aktuálního HTML dokumentu
+    return document.importNode(svgElement, true);
 }
 
 /**
