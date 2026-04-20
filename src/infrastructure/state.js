@@ -270,14 +270,3 @@ export function mutate(mutation) {
 export function resetState() {
     mutate({ type: 'RESET_STATE' });
 }
-
-export function batchMutations(mutations) {
-    const oldState = getState();
-    
-    mutations.forEach(mutation => {
-        mutate(mutation);
-    });
-    
-    
-    notifySubscribers(oldState, getState(), { type: 'BATCH', mutations });
-}

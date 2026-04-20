@@ -1,6 +1,6 @@
 import { getState, subscribe } from './infrastructure/state.js';
 import { dispatch } from './infrastructure/dispatcher.js';
-import { initRouter } from './infrastructure/router.js';
+import { initRouter, updateUrlFromState } from './infrastructure/router.js';
 import * as selectors from './selectors/index.js';
 import { renderVehiclesView, renderVehicleDetailView } from './views/vehicles.js';
 import { renderReservationsView, renderReservationDetailView } from './views/reservations.js';
@@ -8,6 +8,7 @@ import { renderModal } from './views/modals.js';
 import { renderNavigation, renderNotifications, renderFooter, renderDashboardSummary } from './views/layout.js';
 import { renderLoginModal } from './views/auth.js';
 import { el, clear } from './views/components.js';
+
 
 const appElement = document.getElementById('app');
 
@@ -99,6 +100,7 @@ async function init() {
 
     subscribe((newState, oldState, mutation) => {
         console.log('[State] Změna:', mutation.type);
+        updateUrlFromState(newState);
         render();
     });
 

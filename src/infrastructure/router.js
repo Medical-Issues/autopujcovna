@@ -101,7 +101,3 @@ export function initRouter() {
     
     handleRouteChange();
 }
-
-export function navigateTo(path) {
-    window.location.hash = path;
-}

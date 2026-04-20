@@ -34,9 +34,9 @@ interface Action {
 ### 2.1 Architektura
 
 ```
-┌─────────────┐    dispatch()    ┌─────────────────┐    handler()    ┌──────────────┐
+┌─────────────┐    dispatch()    ┌─────────────────┐    handler()   ┌──────────────┐
 │   UI /      │ ────────────────>│   Dispatcher    │───────────────>│   Business   │
-│   Handler   │    {type, payload}│   (IR02)        │   entity call  │   Entita     │
+│   Handler   │   {type, payload}│   (IR02)        │   entity call  │   Entita     │
 └─────────────┘                  └─────────────────┘                └──────────────┘
                                                                          │
                                     ┌─────────────────┐                  │
